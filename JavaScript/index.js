@@ -213,7 +213,7 @@ function render() {
     }
 }
 
-const endpoint = 'https://v1.nocodeapi.com/jamesability/spotify/iiBNRvMyvUlSSeTR/artists?id=4AT7XlLBevgZIiKvZQ83ye&queryType=albums'
+const endpoint = 'https://v1.nocodeapi.com/jamesability/spotify/oEmloKmOocfOxIzP/artists?id=4AT7XlLBevgZIiKvZQ83ye&queryType=albums'
 
 // This gets the data from the Spotify endpoint
 const jamesPromise = fetch(endpoint)
