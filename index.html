@@ -2,31 +2,78 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./CSS/style.css">
+    <link rel="stylesheet" href="./CSS/responsive.css">
     <script src="https://kit.fontawesome.com/d5872d8717.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="./CSS/styles.css">
-    <link rel="stylesheet" href="./CSS/base.css">
-    <link rel="stylesheet" href="./CSS/mediaQueries.css">
-    <title>Spotify Top 50</title>
+    <title>Trivecta - A tribute</title>
+    <link rel="stylesheet" href="CSS/style.css">
 </head>
 <body>
-    
-    <div class="page">
-        <!--Theme switch-->
-        <input type="checkbox" id="themeSwitch" name="theme-switch" class="theme-switch__input" />
-        <label for="themeSwitch" class="theme-switch__label">
-            <span>Switch theme</span>
-        </label>
-        
-        <!--Main page content-->
-        <main>
-            <div class="wrapper">
-                <h1>SPOTIFY'S CURRENT TOP 50 SONGS</h1>
-                
-            </div>
-        </main>
+
+<!-- Theme panel-->
+
+<div class="theme-panel">
+    <div class="theme-body">
+        <span>Change Theme</span>
+        <div class="btn-group">
+            <button data-toggle="light" class="switcher-btn active">Light</button>
+            <button data-toggle="dark" class="switcher-btn">Dark</button>
+        </div>
+        <button class="theme-tab">
+            <i class="fas fa-chevron-left"></i>
+        </button>
     </div>
-    <script src="./JavaScript/main.js"></script>
+</div>
+
+<!--Nav bar-->
+
+<nav>
+    <div class="title">
+        <img src="./Assets/TRIVECTA_LOGO_HORIZ_WHT.png" alt="">
+    </div>
+    <ul>
+        <li id="favs" data-open="favs-modal">Favorites</li>
+        <li><a href="http://trivectamusic.com/shows/">Tour</a></li>
+    </ul>
+</nav>
+
+<div class="container text-area">
+    <h1>Trivecta</h1>
+    <p>So i usually hate EDM but Sam's stuff is just beautiful, mind-blowing, and epic! <br>  This project website is for you, my friend</p>
+    <p>Collect and save your favorite tracks from Trivecta</p>
+    <select name="sort-selector" id="sort-selector">
+        <option value="newest-oldest">Newest to Oldest</option>
+        <option value="oldest-newest">Oldest to Newest</option>
+    </select>
+    <div id="list-of-items">
+    <ul class="card">
+    </ul>
+        </div>
+</div>
+
+<!-- Modal -->
+<div id="favs-modal" class="modal" data-animation="slideInOutTop">
+    <div class="modal-dialog">
+        <header class="modal-header">
+            <h3>Favorites</h3>
+            <i class="fas fa-times" data-close></i>
+        </header>
+        <div class="modal-body">
+            <ul id="favs-list">
+
+            </ul>
+        </div>
+    </div>
+</div>
+<!--Footer-->
+<footer>
+    <div class="logo">
+        <img src="./Assets/TRIVECTA_LOGO_HORIZ_WHT.png" alt="">
+    </div>
+    <p>Made with PEACE and LOVE by James Geiger</p>
+    <p class="copyright">&copy; 2022</p>
+</footer>
+<script src="./JavaScript/index.js"></script>
 </body>
 </html>
+
