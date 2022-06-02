@@ -41,7 +41,7 @@
     <h1>Trivecta</h1>
     <p>So i usually hate EDM but Sam's stuff is just beautiful, mind-blowing, and epic! <br>  This project website is for you, my friend</p>
     <p>Collect and save your favorite tracks from Trivecta</p>
-    <select name="sort-selector" id="sort-selector">
+    <select name="sort-selector" class="sort-selector">
         <option value="newest-oldest">Newest to Oldest</option>
         <option value="oldest-newest">Oldest to Newest</option>
     </select>
@@ -59,8 +59,16 @@
             <i class="fas fa-times" data-close></i>
         </header>
         <div class="modal-body">
+            
+                <select name="sort-selector" class="sort-selector">
+                    <option value="newest-oldest">Newest to Oldest</option>
+                    <option value="oldest-newest">Oldest to Newest</option>
+                </select>
+            </div>
             <ul id="favs-list">
-
+                <!--
+                    <li><i class="fas fa-times"></i>Name of Single</li>
+                -->
             </ul>
         </div>
     </div>

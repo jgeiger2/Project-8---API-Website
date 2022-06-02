@@ -166,6 +166,10 @@ nav ul {
 
 nav ul li {
     margin: 0 30px;
+    cursor: pointer;
+}
+
+#favs {
 }
 
 ul {
@@ -325,4 +329,8 @@ footer p {
     border-radius: 8px;
     object-fit: cover;
     height: 200px;
+}
+i.fas.fa-times {
+    padding-right: 20px;
+    cursor: pointer;
 }

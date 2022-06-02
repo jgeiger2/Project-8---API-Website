@@ -33,8 +33,9 @@ const favsList = document.querySelector('#favs-list');
 const favsLink = document.querySelector('#favs');
 const openModal = document.querySelectorAll(modalOpen);
 const closeModal = document.querySelectorAll(modalClose);
+const modalBody = document.querySelector('.modal-body');
 
-const sortSelector = document.querySelector('#sort-selector');
+const sortSelectors = document.querySelectorAll('.sort-selector');
 
 const setActive = (elm, selector) => {
     if (document.querySelector(`${selector}.${active}`) !== null) {
@@ -43,13 +44,8 @@ const setActive = (elm, selector) => {
 };
 
 const setTheme = (val) => {
-    if(val === dark) {
-        root.setAttribute(dataTheme, dark);
-        localStorage.setItem(theme, dark);
-    } else {
-        root.setAttribute(dataTheme, light);
-        localStorage.setItem(theme, light);
-    }
+    root.setAttribute(dataTheme, val);
+    localStorage.setItem(theme, val);
 };
 
 if (currentTheme) {
@@ -58,11 +54,8 @@ if (currentTheme) {
         btn.classList.remove(active);
     });
 
-    if (currentTheme === dark) {
-        switcher[1].classList.add(active);
-    } else {
-        switcher[0].classList.add(active);
-    }
+    const index = currentTheme === dark ? 1 : 0;
+    switcher[index].classList.add(active);
 }
 
 toggleTheme.addEventListener('click', function() {
@@ -87,25 +80,27 @@ favsButton.addEventListener('click', function (event) {
     console.log('the favs button has been pressed');
 });
 
-sortSelector.addEventListener('change', function (event) {
-    albums.sort(function (album1, album2) {
-        if (album1.release_date < album2.release_date) { // album1 come before album2
-            return -1;
+for (const sortSelector of sortSelectors) {
+    sortSelector.addEventListener('change', function (event) {
+        albums.sort(function (album1, album2) {
+            if (album1.release_date < album2.release_date) { // album1 come before album2
+                return -1;
+            }
+            else if (album1.release_date > album2.release_date) {
+                return 1;
+            }
+            else {
+                return 0;
+            }
+        });
+
+        if (sortSelector.value === 'newest-oldest') {
+            albums.reverse();
         }
-        else if (album1.release_date > album2.release_date) {
-            return 1;
-        }
-        else {
-            return 0;
-        }
+
+        render();
     });
-
-    if (sortSelector.value === 'newest-oldest') {
-        albums.reverse();
-    }
-
-    render();
-});
+}
 
 for (const elm of openModal) {
     elm.addEventListener('click', function() {
@@ -120,96 +115,102 @@ for (const elm of closeModal) {
     })
 }
 
+const removeChild = (object) => {
+    while (object.firstChild) {
+        object.removeChild(object.firstChild);
+    }
+}
 function render() {
     console.log(albums);
     const cardList = document.querySelector(".card");
     const favsList = document.querySelector("#favs-list");
 
-    while (cardList.firstChild) {
-        cardList.removeChild(cardList.firstChild);
-    }
+    removeChild(cardList);
+    removeChild(favsList);
 
-    while (favsList.firstChild) {
-        favsList.removeChild(favsList.firstChild);
-    }
-        
     for (let single of albums) {
         if (single.favorited) {
             const { album_type, name, release_date, images } = single
             
             const newListItem = document.createElement("li")
-            newListItem.innerText = name;
+            const icon = document.createElement('i');
+            icon.classList.add('fas');
+            icon.classList.add('fa-times');
+            icon.addEventListener('click', function () {
+                // modify the model
+                single.favorited = false;
+                // re-render
+                render();
+            });
+            newListItem.appendChild(icon);
+
+            const nameSpan = document.createElement('span');
+
+            let date = release_date.split('-');
+            let year = date[0];
+            nameSpan.innerText = `${name} (${year})`;
+
+            newListItem.appendChild(nameSpan);
 
             favsList.appendChild(newListItem);
         }
     }
 
     for (let single of albums) {
-        const { album_type, name, release_date, images } = single
-        
-        const newListItem = document.createElement("li")
-        const newListImg = document.createElement("img")
-        const title = document.createElement("h3")
-        
-        title.innerText = `${name}`
-        title.classList.add("song-title")
-        
-        // newListItem = <li></li>
-        newListItem.appendChild(title)
-        newListImg.src = `${images[1].url}`
-        newListItem.appendChild(newListImg)
-        
-        // reformat release_date
-        let date = release_date.split('-')
-        let year = date[0]
-        let month = date[1]
-        let day = date[2]
-        let newDate = `${month}/${day}/${year}`
-        
-        
-        console.log(newDate)
-        
-        const divBottom = document.createElement("div");
-        const divAlbumInfo = document.createElement("div");
-        const divHeart = document.createElement("div");
-        
-        divBottom.appendChild(divAlbumInfo);
-        divBottom.appendChild(divHeart);
-        
-        divAlbumInfo.setAttribute(`class`, `album-info`);
-        divAlbumInfo.innerHTML = `${newDate}<br><br><strong>${album_type.toUpperCase()}</strong>`;
-        
-        divHeart.setAttribute(`class`, `heart`);
-        divHeart.innerHTML = `<i class="fa-regular fa-heart"></i>`
-        
-        
-        newListItem.addEventListener('click', function () {
-            console.log(single);
-            if (single.favorited === true) {
-                single.favorited = false;
-            } 
-            else if ( single.favorited === false ) {
-                single.favorited = true;
-            }
-            render();
-        });
-        
-        switch (single.favorited) {
-            case true:
-                divHeart.innerHTML = `<i class="fas fa-solid fa-heart"></i>`
-                break;
-            case false:
-                divHeart.innerHTML = `<i class="far fa-heart"></i>`
-            default:
-                break;
-        }
+        if (!single.favorited) {
+            const { album_type, name, release_date, images } = single
+            
+            const newListItem = document.createElement("li")
+            const newListImg = document.createElement("img")
+            const title = document.createElement("h3")
+            
+            title.innerText = `${name}`
+            title.classList.add("song-title")
+            
+            // newListItem = <li></li>
+            newListItem.appendChild(title)
+            newListImg.src = `${images[1].url}`
+            newListItem.appendChild(newListImg)
+            
+            // reformat release_date
+            let date = release_date.split('-')
+            let year = date[0]
+            let month = date[1]
+            let day = date[2]
+            let newDate = `${month}/${day}/${year}`
+            
+            
+            console.log(newDate)
+            
+            const divBottom = document.createElement("div");
+            const divAlbumInfo = document.createElement("div");
+            const divHeart = document.createElement("div");
+            
+            divBottom.appendChild(divAlbumInfo);
+            divBottom.appendChild(divHeart);
+            
+            divAlbumInfo.setAttribute(`class`, `album-info`);
+            divAlbumInfo.innerHTML = `${newDate}<br><br><strong>${album_type.toUpperCase()}</strong>`;
+            
+            divHeart.setAttribute(`class`, `heart`);
+            divHeart.innerHTML = `<i class="fa-regular fa-heart"></i>`
+            
+            
+            newListItem.addEventListener('click', function () {
+                console.log(single);
+                single.favorited = !single.favorited;
+                render();
+            });
+            
+            divHeart.innerHTML = single.favorited ? `<i class="fa-solid fa-heart"></i>` : `<i class="fa-regular fa-heart"></i>`;
 
-        newListItem.appendChild(divBottom);
-        
-        const list = document.querySelector(".card")
-        list.appendChild(newListItem)
-        
-        console.log(newListImg)
+            newListItem.appendChild(divBottom);
+            
+            const list = document.querySelector(".card")
+            list.appendChild(newListItem)
+            
+            console.log(newListImg)
+        }
     }
 }
 
@@ -230,7 +231,6 @@ jamesPromise
             single.favorited = false;
                 albums.push(single);
             }
-            return 42;
         }
     )
     .then(resultOfLastPromise => { render() })
